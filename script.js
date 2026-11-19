@@ -9,9 +9,18 @@ function saveBooks() {
 }
 
 function showBooks() {
+   
+function showBooks(keyword = "") {
     bookList.innerHTML = "";
 
-    books.forEach((book, index) => {
+    const filteredBooks = books.filter(book =>
+        book.title.toLowerCase().includes(keyword.toLowerCase()) ||
+        book.author.toLowerCase().includes(keyword.toLowerCase())
+    );
+
+    filteredBooks.forEach((book) => {
+        const index = books.indexOf(book);
+
         const card = document.createElement("div");
         card.className = "book-card";
 
@@ -66,6 +75,12 @@ bookList.addEventListener("click", function (event) {
         saveBooks();
         showBooks();
     }
+});
+
+const searchInput = document.querySelector(".toolbar input");
+
+searchInput.addEventListener("input", function () {
+    showBooks(this.value);
 });
 
 showBooks();
