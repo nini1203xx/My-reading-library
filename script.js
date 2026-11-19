@@ -7,8 +7,6 @@ let books = JSON.parse(localStorage.getItem("myBooks")) || [];
 function saveBooks() {
     localStorage.setItem("myBooks", JSON.stringify(books));
 }
-
-function showBooks() {
    
 function showBooks(keyword = "") {
     bookList.innerHTML = "";
