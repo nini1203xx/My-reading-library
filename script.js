@@ -1,24 +1,19 @@
-
 const addButton = document.querySelector(".toolbar button");
 const bookList = document.querySelector(".book-list");
 
+// Lấy danh sách truyện đã lưu
 let books = JSON.parse(localStorage.getItem("myBooks")) || [];
 
+// Lưu danh sách truyện
 function saveBooks() {
     localStorage.setItem("myBooks", JSON.stringify(books));
 }
-   
-function showBooks(keyword = "") {
+
+// Hiển thị truyện
+function showBooks() {
     bookList.innerHTML = "";
 
-    const filteredBooks = books.filter(book =>
-        book.title.toLowerCase().includes(keyword.toLowerCase()) ||
-        book.author.toLowerCase().includes(keyword.toLowerCase())
-    );
-
-    filteredBooks.forEach((book) => {
-        const index = books.indexOf(book);
-
+    books.forEach((book, index) => {
         const card = document.createElement("div");
         card.className = "book-card";
 
@@ -37,9 +32,13 @@ function showBooks(keyword = "") {
     });
 }
 
+// Thêm truyện
 addButton.addEventListener("click", function () {
     const title = prompt("Tên truyện là gì?");
-    if (!title || !title.trim()) return;
+
+    if (!title || !title.trim()) {
+        return;
+    }
 
     const author = prompt("Tên tác giả:");
     const rating = prompt("Đánh giá truyện (ví dụ: 5.0):");
@@ -62,23 +61,24 @@ addButton.addEventListener("click", function () {
         status: statusText[status] || "📖 Đang đọc"
     });
 
+    // Lưu vào localStorage
     saveBooks();
+
+    // Hiển thị lại danh sách
     showBooks();
 });
 
+// Xóa truyện
 bookList.addEventListener("click", function (event) {
     if (event.target.classList.contains("delete-button")) {
         const index = Number(event.target.dataset.index);
+
         books.splice(index, 1);
+
         saveBooks();
         showBooks();
     }
 });
 
-const searchInput = document.querySelector(".toolbar input");
-
-searchInput.addEventListener("input", function () {
-    showBooks(this.value);
-});
-
+// Hiển thị truyện khi mở web
 showBooks();
